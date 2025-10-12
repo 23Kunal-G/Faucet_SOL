@@ -1,0 +1,18 @@
+{
+  "name": "faucet_sol",
+  "version": "1.0.0",
+  "description": "The Faucet Project aims to provide a secure and fair platform for users to claim a small number of tokens periodically",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Kunal",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^5.1.0",
+    "mongoose": "^8.19.1"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.3"
+  }
+}
