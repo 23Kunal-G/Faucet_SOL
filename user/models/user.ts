@@ -1,8 +1,8 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 const UserSchema = new Schema<any>(
     {
-        collecter:{
+        userAddress: {
             type: String,
             required: true,
         },
@@ -12,11 +12,13 @@ const UserSchema = new Schema<any>(
         ip: {
             type: String,
         },
-        claimTime: {
+        lastClaimtime: {
             type: Number,
             required: true,
         },
     }
 );
 
-export default UserSchema;
+const User = mongoose.model("user", UserSchema);
+
+export default User;
