@@ -1,7 +1,7 @@
 import User from "../models/user";
 import { Request , Response } from "express";
 
-export const ClaimTokenRoute = async (req : Request , res: Response) => {
+export const ClaimToken = async (req : Request , res: Response) => {
     const claimer = await req.body.claimerAddress;
 
     try {

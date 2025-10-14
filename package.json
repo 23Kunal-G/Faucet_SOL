@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "The Faucet Project aims to provide a secure and fair platform for users to claim a small number of tokens periodically",
   "main": "app.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,9 +11,14 @@
   "license": "ISC",
   "dependencies": {
     "express": "^5.1.0",
-    "mongoose": "^8.19.1"
+    "mongoose": "^8.19.1",
+    "nodemon": "^3.1.10"
   },
   "devDependencies": {
-    "@types/express": "^5.0.3"
+    "@types/express": "^5.0.3",
+    "@types/node": "^24.7.2",
+    "dotenv": "^17.2.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3"
   }
 }
