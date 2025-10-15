@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "The Faucet Project aims to provide a secure and fair platform for users to claim a small number of tokens periodically",
   "main": "app.ts",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon --exec ts-node app.ts"
   },
   "author": "Kunal",
   "license": "ISC",
