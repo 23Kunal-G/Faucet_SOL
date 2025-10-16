@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import UserTokenClaimRouter from "./routers/user/claimRoute";
+import UserStatusRouter from "./routers/user/checkStatusRoute";
 import { connectDB } from "./config/connection";
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/user", UserTokenClaimRouter);
+app.use("/api/:claimerAddress", UserStatusRouter);
 
 // database connection
 connectDB(url)
