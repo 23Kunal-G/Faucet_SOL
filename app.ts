@@ -13,8 +13,7 @@ const url: string = process.env.MONGO_URL || "";
 app.use(express.json());
 
 // routes
-app.use("/api/user", UserTokenClaimRouter);
-app.use("/api/:claimerAddress", UserStatusRouter);
+app.use("/api/user", UserTokenClaimRouter , UserStatusRouter);
 
 // database connection
 connectDB(url)

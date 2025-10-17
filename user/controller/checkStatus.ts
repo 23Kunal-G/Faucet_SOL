@@ -2,7 +2,7 @@ import { Request, Response } from "express"
 import User from "../models/user";
 
 export const checkStatus = async (req: Request, res: Response) => {
-    const claimer = req.params.claimerAddress;
+    const claimer = req.body.claimerAddress;
     console.log(claimer);
 
     try {
