@@ -1,21 +1,35 @@
 import mongoose, { Schema } from "mongoose";
 
-const UserSchema = new Schema<any>(
+export interface IUser extends mongoose.Document {
+    userAddress: string,
+    userAgent: string,
+    ip: string,
+    lastClaimTime: number,
+    nextClaimTime: number,
+    txHash: string
+}
+
+const UserSchema = new Schema<IUser>(
     {
         userAddress: {
             type: String,
             required: true,
         },
-        browser: {
+        userAgent: {
             type: String,
         },
         ip: {
             type: String,
         },
-        lastClaimtime: {
+        lastClaimTime: {
             type: Number,
-            required: true,
         },
+        nextClaimTime: {
+            type: Number,
+        },
+        txHash: {
+            type: String,
+        }
     }
 );
 

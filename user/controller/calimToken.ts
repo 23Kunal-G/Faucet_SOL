@@ -30,9 +30,11 @@ export const ClaimToken = async (req: Request, res: Response) => {
     } else {
       const newUser = new User({
         userAddress: claimer,
-        browser: req.headers["user-agent"],
+        userAgent: req.headers["user-agent"],
         ip: req.ip,
         lastClaimtime: currentTime,
+        nextClaimTime: currentTime + day,
+        txHash: ''
       });
 
       await newUser.save();
