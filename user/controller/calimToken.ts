@@ -1,4 +1,5 @@
 import User from "../models/user";
+import Admin from "../../admin/models/admin";
 import { Request, Response } from "express";
 
 export const ClaimToken = async (req: Request, res: Response) => {
@@ -23,6 +24,18 @@ export const ClaimToken = async (req: Request, res: Response) => {
       user.lastClaimtime = currentTime;
       await user.save();
 
+      await Admin.updateOne(
+        {},
+        {
+          $inc: {
+            totalClaims: +1, 
+            totalTokensDistributed: +2,
+            lastUpdated: currentTime,
+            faucetWalletBalance: -2
+          }
+        }
+      );
+
       return res.status(200).json({
         message: "You claimed tokens successfully.",
         success: true,
@@ -38,6 +51,19 @@ export const ClaimToken = async (req: Request, res: Response) => {
       });
 
       await newUser.save();
+
+      await Admin.updateOne(
+        {},
+        {
+          $inc: {
+            totalUsers: +1,
+            totalClaims: +1, 
+            totalTokensDistributed: +2,
+            lastUpdated: currentTime,
+            faucetWalletBalance: -2
+          }
+        }
+      );
 
       return res.status(201).json({
         message: "You claimed tokens successfully.",

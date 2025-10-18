@@ -1,19 +1,49 @@
 import mongoose from "mongoose";
 
-const adminSchema = new mongoose.Schema<any>(
+export interface IAdmin extends mongoose.Document {
+    faucetTokenAddress: string;
+    claimAmount: number;
+    claimIntervalHours: number;
+    totalUsers: number;
+    totalClaims: number;
+    totalTokensDistributed: number;
+    faucetWalletBalance: number;
+    lastUpdated: number
+}
+
+const adminSchema = new mongoose.Schema<IAdmin>(
     {
-        adminAddress: {
+        faucetTokenAddress: {
             type: String,
-            required: true,
         },
-        totalNumberOfTokens: {
+        claimAmount: {
             type: Number,
-            required: true,
+            default: 2,
         },
-        totalNumberOfClaims: {
+        claimIntervalHours: {
             type: Number,
-            required: true,
-        }, 
+            default: 24,
+        },
+        totalUsers: {
+            type: Number,
+            default: 0
+        },
+        totalClaims:{
+            type: Number,
+            default: 0
+        },
+        totalTokensDistributed: {
+            type: Number,
+            default: 0
+        },
+        faucetWalletBalance: {
+            type: Number,
+            default: 0
+        },
+        lastUpdated: {
+            type: Number,
+            default: Date.now()
+        }
     }
 );
 
