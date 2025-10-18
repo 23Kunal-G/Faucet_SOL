@@ -1,19 +1,12 @@
 import mongoose, { Schema } from "mongoose";
-
-export interface IUser extends mongoose.Document {
-    userAddress: string,
-    userAgent: string,
-    ip: string,
-    lastClaimTime: number,
-    nextClaimTime: number,
-    txHash: string
-}
+import { IUser } from "../../interface/userInterface";
 
 const UserSchema = new Schema<IUser>(
     {
         userAddress: {
             type: String,
             required: true,
+            unique: true
         },
         userAgent: {
             type: String,
@@ -29,8 +22,39 @@ const UserSchema = new Schema<IUser>(
         },
         txHash: {
             type: String,
-        }
-    }
+        },
+        totalClaims: {
+            type: Number,
+            default: 0
+        },
+        totalTokensClaimed: {
+            type: Number,
+            default: 0
+        },
+        lastClaimedTime: {
+            type: Number,
+        },
+        walletBalanceAtClaim: {
+            type: Number,
+        },
+        status: {
+            type: String,
+        },
+        country: {
+            type: String,
+        },
+        deviceType: {
+            type: String,
+        },
+        createdAt: {
+            type: Number,
+            default: Date.now(),
+        },
+        updatedAt: {
+            type: Number,
+            default: Date.now(),
+        },
+    },
 );
 
 const User = mongoose.model("user", UserSchema);
