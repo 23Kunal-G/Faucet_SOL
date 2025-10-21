@@ -3,22 +3,33 @@ import { IAdmin } from "../../interface/adminInterfcae";
 
 const adminSchema = new mongoose.Schema<IAdmin>(
     {
+        adminAddress: { type: String, 
+            required: true 
+        },
+
+        // Faucet configurations
         faucetTokenAddress: {
             type: String,
         },
         claimAmount: {
             type: Number,
-            default: 2,
+            default: 100,
         },
         claimIntervalHours: {
             type: Number,
             default: 24,
         },
+        maxDailyClaims: { 
+            type: Number,
+            default: 1 
+        },
+
+        // System configuration
         totalUsers: {
             type: Number,
             default: 0
         },
-        totalClaims:{
+        totalClaims: {
             type: Number,
             default: 0
         },
@@ -26,14 +37,44 @@ const adminSchema = new mongoose.Schema<IAdmin>(
             type: Number,
             default: 0
         },
-        faucetWalletBalance: {
+        totalActiveUsers: {
             type: Number,
             default: 0
         },
+        latestWalletBalance: {
+            type: Number,
+            default: 0
+        },
+        faucetWalletAddress: {
+            type: String,
+        },
+
+        // monitoring
+        recentTransactions : [
+            {
+                txHash: String,
+                claimerAddress: String,
+                claimedAt: Date,
+                amount: String
+            }
+        ],
+
+        // analytics
         lastUpdated: {
             type: Number,
             default: Date.now()
-        }
+        },
+        systemHealth: {
+            faucetOnline: {
+                type: Boolean,
+                default: false
+            },
+            lastPayoutCheck: {
+                type: Number,
+                default: Date.now()
+            },
+            errorLogs: [String]
+        },
     }
 );
 
