@@ -1,3 +1,4 @@
+import { ethers } from "ethers";
 import mongoose from "mongoose";
 
 export async function connectDB(url: string) {
@@ -10,4 +11,16 @@ export async function connectDB(url: string) {
         throw error;   
     }
     
+}
+
+export default async function connectRPC(endpoint: string) {
+    try {
+        const provider = new ethers.JsonRpcProvider(endpoint);
+        const network = await provider.getNetwork();
+        console.log(`RPC connected: ${network}`);
+        return provider;
+    } catch (error) {
+        console.log(`Error in RPC conncetion : ${error}`);
+        throw error;
+    }
 }
