@@ -17,7 +17,7 @@ export default async function connectRPC(endpoint: string) {
     try {
         const provider = new ethers.JsonRpcProvider(endpoint);
         const network = await provider.getNetwork();
-        console.log(`RPC connected: ${network}`);
+        console.log(`RPC connected chainID: ${network.chainId}`);
         return provider;
     } catch (error) {
         console.log(`Error in RPC conncetion : ${error}`);
