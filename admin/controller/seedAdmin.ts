@@ -7,11 +7,11 @@ export const seedAdmin = async (adminAddress: string) => {
     let admin = await Admin.findOne({ adminAddress: adminAddress });
 
     // Fetch admin wallet balance
-    let balance = getBalance(adminAddress);
+    let balance = await getBalance(adminAddress);
+
     if (!admin) {
       admin = new Admin({
         adminAddress: adminAddress,
-
         faucetTokenAddress: "",
         claimAmount: 0,
         claimIntervalHours: 0,
@@ -20,7 +20,7 @@ export const seedAdmin = async (adminAddress: string) => {
         totalClaims: 0,
         totalTokensDistributed: 0,
         totalActiveUsers: 0,
-        latestWalletBalance: balance,
+        latestWalletBalance: Number(balance),
         faucetWalletAddress: adminAddress,
         recentTransactions: [],
 
@@ -34,6 +34,10 @@ export const seedAdmin = async (adminAddress: string) => {
 
       await admin.save();
       console.log(`Admin created : ${adminAddress}`);
+    } else {
+      console.log(`Admin already exist : ${adminAddress}`);
     }
-  } catch (error) {}
+  } catch (error) {
+    console.error("Error seeding admin:", error);
+  }
 };
