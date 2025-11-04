@@ -20,4 +20,28 @@ contract Faucet {
     ClaimDetails[] public claimHistory;
     mapping ( address => uint256) public lastClaimTime;
 
+    event Claimed(address indexed user, uint256 amount, uint256 time);
+    event Funded(address indexed admin, uint256 amount);
+
+    constructor(address _tokenAddress, uint256 _claimAmount) {
+        admin = msg.sender;
+        token = IERCSEPOLIA20(_tokenAddress);
+        claimAmount = _claimAmount;
+    }
+
+    modifier _onlyAdmin() {
+        require(msg.sender == admin, "Only admin can called this function");
+        _;
+    }
+
+    function fundFaucet(uint256 amount) external _onlyAdmin {
+        bool success = token.transfer(address(this), amount);
+        require(success, "Funding faild");
+        emit Funded(msg.sender, amount);
+    }
+
+    // function claimToken() external {
+    //     require(condition);
+    // }
+
 }
