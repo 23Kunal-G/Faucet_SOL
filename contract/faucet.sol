@@ -1,15 +1,12 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >0.8.20;
 
-interface IERCSEPOLIA20 {
-    function transfer (address recipent, uint256 amount ) external returns (bool);
-    function blanceOf (address account) external view returns (uint256);
-}
 
 contract Faucet {
     address public admin;
-    IERCSEPOLIA20 public token;
     uint256 public claimAmount;
+    uint256 public cooldownTime; // seconds between claims
+
 
     struct ClaimDetails {
         address user;
@@ -23,10 +20,10 @@ contract Faucet {
     event Claimed(address indexed user, uint256 amount, uint256 time);
     event Funded(address indexed admin, uint256 amount);
 
-    constructor(address _tokenAddress, uint256 _claimAmount) {
+    constructor( uint256 _claimAmount, uint256 _cooldownTime) {
         admin = msg.sender;
-        token = IERCSEPOLIA20(_tokenAddress);
         claimAmount = _claimAmount;
+        cooldownTime = _cooldownTime;
     }
 
     modifier _onlyAdmin() {
@@ -34,14 +31,28 @@ contract Faucet {
         _;
     }
 
-    function fundFaucet(uint256 amount) external _onlyAdmin {
-        bool success = token.transfer(address(this), amount);
-        require(success, "Funding faild");
-        emit Funded(msg.sender, amount);
+    // Allow admin to fund the contract
+    function fundFaucet() external _onlyAdmin {
+        require(msg.value > 0 && msg.value <= 100, "Amount must be between 1 and 100 ETH");
+        emit Funded(msg.sender, msg.value);
     }
 
-    // function claimToken() external {
-    //     require(condition);
-    // }
+    // User Claim ETH
+    function claimToken() external {
+        require(address(this).balance >= claimAmount, "Insufficient balance to claim token");
+        let nextClaimTime = lastClaimTime[msg.sender] + cooldownTime;
+        require(block.timestamp >= nextClaimTime, "With for next claim");
+
+        lastClaimTime[msg.sender] = block.timestamp;
+        
+        payable(msg.sender).transfer(claimAmount);
+
+        let claimDetails = ClaimDetails(msg.sender , claimAmount , block.timestamp);
+        claimHistory.push(claimDetails);
+
+        emit Claimed(msg.sender, claimAmount, block.timestamp);
+    }
+
+    // Get Total 
 
 }
