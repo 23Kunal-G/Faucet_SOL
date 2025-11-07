@@ -32,7 +32,7 @@ contract Faucet {
     }
 
     // Allow admin to fund the contract
-    function fundFaucet() external _onlyAdmin {
+    function fundFaucet() external payable _onlyAdmin {
         require(msg.value > 0 && msg.value <= 100, "Amount must be between 1 and 100 ETH");
         emit Funded(msg.sender, msg.value);
     }
@@ -40,14 +40,15 @@ contract Faucet {
     // User Claim ETH
     function claimToken() external {
         require(address(this).balance >= claimAmount, "Insufficient balance to claim token");
-        let nextClaimTime = lastClaimTime[msg.sender] + cooldownTime;
+        uint256 nextClaimTime = lastClaimTime[msg.sender] + cooldownTime;
         require(block.timestamp >= nextClaimTime, "With for next claim");
 
         lastClaimTime[msg.sender] = block.timestamp;
         
         payable(msg.sender).transfer(claimAmount);
 
-        let claimDetails = ClaimDetails(msg.sender , claimAmount , block.timestamp);
+        // store claim details in array
+        ClaimDetails memory claimDetails = ClaimDetails(msg.sender , claimAmount , block.timestamp);
         claimHistory.push(claimDetails);
 
         emit Claimed(msg.sender, claimAmount, block.timestamp);
@@ -55,13 +56,13 @@ contract Faucet {
 
     // Get Total Claimers
     function getClaimCount() public view returns (uint256) {
-        return claimHistory.length();
+        return claimHistory.length;
     }
 
     // Withdraw remining ETH (admin only)
-    function withdrawETH(uint256 amount) external _onlyAdmin {
-        require(amount <= address(this).balance , "Insufficient balance");
-        payable(admin).transfer(amount);
+    function withdrawETH() payable external _onlyAdmin {
+        require(msg.value <= address(this).balance , "Insufficient balance");
+        payable(admin).transfer(msg.value);
     }
 
 }
