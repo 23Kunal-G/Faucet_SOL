@@ -53,6 +53,15 @@ contract Faucet {
         emit Claimed(msg.sender, claimAmount, block.timestamp);
     }
 
-    // Get Total 
+    // Get Total Claimers
+    function getClaimCount() public view returns (uint256) {
+        return claimHistory.length();
+    }
+
+    // Withdraw remining ETH (admin only)
+    function withdrawETH(uint256 amount) external _onlyAdmin {
+        require(amount <= address(this).balance , "Insufficient balance");
+        payable(admin).transfer(amount);
+    }
 
 }
