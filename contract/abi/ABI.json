@@ -5,6 +5,26 @@
 				"internalType": "uint256",
 				"name": "_claimAmount",
 				"type": "uint256"
+			}
+		],
+		"name": "chnageClaimAmount",
+		"outputs": [],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "claimToken",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
+				"internalType": "uint256",
+				"name": "_claimAmount",
+				"type": "uint256"
 			},
 			{
 				"internalType": "uint256",
@@ -58,6 +78,20 @@
 		],
 		"name": "Funded",
 		"type": "event"
+	},
+	{
+		"inputs": [],
+		"name": "fundFaucet",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"name": "withdrawETH",
+		"outputs": [],
+		"stateMutability": "payable",
+		"type": "function"
 	},
 	{
 		"inputs": [],
@@ -116,13 +150,6 @@
 	},
 	{
 		"inputs": [],
-		"name": "claimToken",
-		"outputs": [],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [],
 		"name": "cooldownTime",
 		"outputs": [
 			{
@@ -132,13 +159,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "fundFaucet",
-		"outputs": [],
-		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -171,13 +191,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [],
-		"name": "withdrawETH",
-		"outputs": [],
-		"stateMutability": "payable",
 		"type": "function"
 	}
 ]
