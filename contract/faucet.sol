@@ -4,7 +4,7 @@ pragma solidity >0.8.20;
 
 contract Faucet {
     address public admin;
-    uint256 public claimAmount = 0.5 ether;
+    uint256 public claimAmount;
     uint256 public cooldownTime; // seconds between claims
     uint256 decimal = 1000000000;
     uint256 minAmount = 1 ether ;
@@ -23,8 +23,9 @@ contract Faucet {
     event Claimed(address indexed user, uint256 amount, uint256 time);
     event Funded(address indexed admin, uint256 amount);
 
-    constructor( uint256 _cooldownTime) {
+    constructor( uint256 _claimAmount, uint256 _cooldownTime) {
         admin = msg.sender;
+        claimAmount = _claimAmount * 1e18;
         cooldownTime = _cooldownTime;
     }
 
@@ -37,6 +38,12 @@ contract Faucet {
     function fundFaucet() external payable _onlyAdmin {
         require(msg.value > minAmount && msg.value <= maxAmount, "Amount must be between 1 and 100 ETH");
         emit Funded(msg.sender, msg.value);
+    }
+
+    // Change Claim amount
+    function chnageClaimAmount(uint256 _claimAmount) public _onlyAdmin {
+        require(_claimAmount > 0 , "Claim Amount must be getter than 0");
+        claimAmount = _claimAmount * 1e18;
     }
 
     // User Claim ETH
