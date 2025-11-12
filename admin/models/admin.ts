@@ -8,7 +8,7 @@ const adminSchema = new mongoose.Schema<IAdmin>(
         },
 
         // Faucet configurations
-        faucetTokenAddress: {
+        contractAddress: {
             type: String,
         },
         claimAmount: {
