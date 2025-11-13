@@ -39,10 +39,5 @@ export interface IAdmin extends mongoose.Document {
     errorLogs: [string];
   };
 
-  users: [
-    {
-      type: Schema.Types.ObjectId;
-      ref: "User";
-    }
-  ];
+  users: [Schema.Types.ObjectId];
 }

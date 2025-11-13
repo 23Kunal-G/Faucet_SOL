@@ -20,11 +20,5 @@ export interface IUser extends mongoose.Document {
   createdAt: number;
   updatedAt: number;
 
-  admin: [
-    {
-      type: Schema.Types.ObjectId;
-      ref: "Admin";
-      required: true;
-    }
-  ];
+  admin: Schema.Types.ObjectId;
 }

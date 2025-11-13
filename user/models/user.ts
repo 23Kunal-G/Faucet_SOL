@@ -54,6 +54,11 @@ const UserSchema = new Schema<IUser>(
             type: Number,
             default: Date.now(),
         },
+        admin: {
+            type: Schema.Types.ObjectId,
+            ref: "Admin",
+            required: true
+        }
     },
 );
 
