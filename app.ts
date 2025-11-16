@@ -4,8 +4,8 @@ import UserTokenClaimRouter from "./routers/user/claimRoute";
 import UserStatusRouter from "./routers/user/checkStatusRoute";
 import connectRPC,  {connectDB} from "./config/connection";
 import getBalance from "./config/getBalance";
-import { error } from "console";
 import { seedAdmin } from "./admin/controller/seedAdmin";
+import { swaggerDocs } from "./swagger/swagger";
 
 dotenv.config();
 
@@ -17,6 +17,8 @@ const adminAddress: string = process.env.SEED_ADMIN_ADDRESS || "";
 
 // middleware
 app.use(express.json());
+
+swaggerDocs(app, PORT);
 
 // routes
 app.use("/api/user", UserTokenClaimRouter , UserStatusRouter);
