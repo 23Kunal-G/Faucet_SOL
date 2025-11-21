@@ -22,7 +22,8 @@ export const checkStatus = async (req: Request, res: Response) => {
 
         return res.status(200).json({
           statusCode: 200,
-          message:"You can claim token only after 24 hours from your last claim.",
+          message:
+            "You can claim token only after 24 hours from your last claim.",
           success: true,
           data: {
             remaingTime: remaingTime,
