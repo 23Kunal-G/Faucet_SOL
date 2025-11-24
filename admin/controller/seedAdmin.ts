@@ -1,14 +1,14 @@
 import Admin from "../models/admin";
 
-export const seedAdmin = async (adminAddress: string) => {
+export const seedAdmin = async (ownerAddress: string) => {
   try {
     // Check if admin already exists
-    let admin = await Admin.findOne({ adminAddress });
+    let owner = await Admin.findOne({ ownerAddress });
 
-    if (!admin) {
+    if (!owner) {
       // Create admin with base structure
-      admin = new Admin({
-        adminAddress,
+      owner = new Admin({
+        ownerAddress,
 
         // MULTI-NETWORK CONFIG (BEGIN WITH EMPTY ARR)
         networks: [],
@@ -37,10 +37,10 @@ export const seedAdmin = async (adminAddress: string) => {
         users: [],
       });
 
-      await admin.save();
-      console.log(`Admin created: ${adminAddress}`);
+      await owner.save();
+      console.log(`Admin created: ${ownerAddress}`);
     } else {
-      console.log(`Admin already exists: ${adminAddress}`);
+      console.log(`Admin already exists: ${ownerAddress}`);
     }
   } catch (error) {
     console.error("Error seeding admin:", error);
