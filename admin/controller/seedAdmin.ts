@@ -1,41 +1,46 @@
-import getBalance from "../../config/getBalance";
 import Admin from "../models/admin";
 
 export const seedAdmin = async (adminAddress: string) => {
   try {
-    //check if admin exist or not
-    let admin = await Admin.findOne({ adminAddress: adminAddress });
-
-    // Fetch admin wallet balance
-    let balance = await getBalance(adminAddress);
+    // Check if admin already exists
+    let admin = await Admin.findOne({ adminAddress });
 
     if (!admin) {
+      // Create admin with base structure
       admin = new Admin({
-        adminAddress: adminAddress,
-        faucetTokenAddress: "",
-        claimAmount: 0,
-        claimIntervalHours: 0,
-        maxDailyClaims: 0,
+        adminAddress,
+
+        // MULTI-NETWORK CONFIG (BEGIN WITH EMPTY ARR)
+        networks: [],
+
+        // GLOBAL ANTI-ABUSE CONFIGURATION
+        abuseProtection: {
+          blockVPNUsers: false,
+          blockIncognito: false,
+          blockMultipleDevices: false,
+          checkIP: true,
+          checkUserAgent: true,
+          flaggedUsers: [],
+        },
+
+        // GLOBAL STATS
         totalUsers: 0,
         totalClaims: 0,
-        totalTokensDistributed: 0,
-        totalActiveUsers: 0,
-        latestWalletBalance: Number(balance),
-        faucetWalletAddress: adminAddress,
+
+        // GLOBAL SYSTEM LOGS
         recentTransactions: [],
 
+        // SYSTEM META
         lastUpdated: Date.now(),
-        systemHealth: {
-          faucetOnline: false,
-          lastPayoutCheck: Date.now(),
-          errorLogs: [],
-        },
+
+        // USERS RELATION
+        users: [],
       });
 
       await admin.save();
-      console.log(`Admin created : ${adminAddress}`);
+      console.log(`Admin created: ${adminAddress}`);
     } else {
-      console.log(`Admin already exist : ${adminAddress}`);
+      console.log(`Admin already exists: ${adminAddress}`);
     }
   } catch (error) {
     console.error("Error seeding admin:", error);

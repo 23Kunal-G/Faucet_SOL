@@ -10,9 +10,9 @@ export const networkConfigSchema = new mongoose.Schema<INetworkConfig>(
     },
 
     // Addresses
+    adminAddress: { type: String, required: true },
     faucetWalletAddress: { type: String, required: true },
-    contractAddress: { type: String }, // Sepolia only
-    programId: { type: String },       // Solana only
+    contractAddress: { type: String },
 
     // Claim rules
     claimAmount: { type: Number, required: true },
@@ -28,7 +28,6 @@ export const networkConfigSchema = new mongoose.Schema<INetworkConfig>(
     latestWalletBalance: { type: Number, default: 0 },
     isFaucetActive: { type: Boolean, default: false },
     lastHealthCheck: { type: Number, default: Date.now },
-    errorLogs: [String],
 
     // Logging transactions
     recentTransactions: [
