@@ -5,7 +5,7 @@ import { IAdmin } from "../../interface/adminInterfcae";
 const adminSchema = new mongoose.Schema<IAdmin>(
   {
     // ADMIN ADDRESS
-    adminAddress: {
+    ownerAddress: {
       type: String,
       required: true,
       unique: true,

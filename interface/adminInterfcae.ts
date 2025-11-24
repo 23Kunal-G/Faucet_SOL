@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { INetworkConfig } from "./networkConficInterface";
 
 export interface IAdmin extends mongoose.Document {
-  adminAddress: {
+  ownerAddress: {
     type: string;
     required: true;
     unique: true;
@@ -25,12 +25,6 @@ export interface IAdmin extends mongoose.Document {
       flaggedAt: Date;
     }[];
   };
-
-  // Faucet configurations
-  contractAddress: string;
-  claimAmount: number;
-  claimIntervalHours: number;
-  maxDailyClaims: number;
 
   //  System statistics
   totalUsers: number;
