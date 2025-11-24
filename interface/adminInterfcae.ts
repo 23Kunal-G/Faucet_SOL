@@ -1,10 +1,29 @@
 import mongoose, { Schema } from "mongoose";
+import { INetworkConfig } from "./networkConficInterface";
 
 export interface IAdmin extends mongoose.Document {
   adminAddress: {
     type: string;
     required: true;
     unique: true;
+  };
+
+  // Multinetwork Configuration
+  networks: INetworkConfig[];
+
+  // Global anti-abuse settings
+  abuseProtection: {
+    blockVPNUsers: boolean;
+    blockIncognito: boolean;
+    blockMultipleDevices: boolean;
+    checkIP: boolean;
+    checkUserAgent: boolean;
+
+    flaggedUsers: {
+      walletAddress: string;
+      reason: string;
+      flaggedAt: Date;
+    }[];
   };
 
   // Faucet configurations
@@ -16,10 +35,6 @@ export interface IAdmin extends mongoose.Document {
   //  System statistics
   totalUsers: number;
   totalClaims: number;
-  totalTokensDistributed: number;
-  totalActiveUsers: number;
-  latestWalletBalance: number;
-  faucetWalletAddress: string;
 
   // Logs / monitoring
   recentTransactions: [
@@ -31,13 +46,9 @@ export interface IAdmin extends mongoose.Document {
     }
   ];
 
-  // analytics
-  lastUpdated: number;
-  systemHealth: {
-    faucetOnline: boolean;
-    lastPayoutCheck: number;
-    errorLogs: [string];
-  };
-
+  // Relation to user model
   users: [Schema.Types.ObjectId];
+
+  // System metadata
+  lastUpdated: number;
 }
