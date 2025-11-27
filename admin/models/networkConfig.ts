@@ -30,16 +30,19 @@ export const networkConfigSchema = new mongoose.Schema<INetworkConfig>(
     lastHealthCheck: { type: Number, default: Date.now },
 
     // Logging transactions
-    recentTransactions: [
-      {
-        txHash: String,
-        claimerAddress: String,
-        claimedAt: Date,
-        amount: Number,
-        ipAddress: String,
-        userAgent: String,
-      },
-    ],
+    recentTransactions: {
+      transactions: [
+        {
+          txHash: String,
+          claimerAddress: String,
+          claimedAt: Date,
+          amount: String,
+          ipAddress: String,
+          userAgent: String,
+        },
+      ],
+      default: [],
+    },
   },
   { _id: false }
 );

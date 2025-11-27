@@ -15,6 +15,9 @@ const url: string = process.env.MONGO_URL || "";
 const endpoint: string = process.env.SEPOLIA_RPC_ENDPOINT || "";
 const adminAddress: string = process.env.SEED_ADMIN_ADDRESS || "";
 
+// Define networkData or import it from the appropriate module
+const networkData = {}; // Replace with actual network data as needed
+
 // middleware
 app.use(express.json());
 
@@ -38,7 +41,7 @@ async function startServer() {
     console.log(`Admin wallet balance fetched: ${balance}`);
 
     //Initialize Admin
-    await seedAdmin(adminAddress);
+    await seedAdmin(adminAddress, networkData);
     console.log("Admin initialized in DB");
 
     //Start the server

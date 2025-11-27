@@ -1,19 +1,35 @@
 import Admin from "../models/admin";
+import getBalance from "../../config/getBalance";
+import { INetworkConfig } from "../../interface/networkConficInterface";
 
-export const seedAdmin = async (ownerAddress: string) => {
+export const seedAdmin = async (ownerAddress: string, networkData: Partial<INetworkConfig>) => {
   try {
-    // Check if admin already exists
-    let owner = await Admin.findOne({ ownerAddress });
+    //---------------------------------------------
+    // 1. CHECK IF ADMIN EXISTS
+    //---------------------------------------------
+    let admin = await Admin.findOne({ ownerAddress });
 
-    if (!owner) {
-      // Create admin with base structure
-      owner = new Admin({
+    // Fetch wallet balance for network admin
+    if (!networkData.adminAddress) {
+      throw new Error("adminAddress is required to fetch network balance.");
+    }
+    const networkBalance = await getBalance(networkData.adminAddress);
+
+    //---------------------------------------------
+    // 2. CREATE ADMIN IF NOT FOUND
+    //---------------------------------------------
+    if (!admin) {
+      admin = new Admin({
         ownerAddress,
-
-        // MULTI-NETWORK CONFIG (BEGIN WITH EMPTY ARR)
-        networks: [],
-
-        // GLOBAL ANTI-ABUSE CONFIGURATION
+        networks: [
+          {
+            ...networkData,
+            latestWalletBalance: Number(networkBalance),
+            isFaucetActive: false,
+            lastHealthCheck: Date.now(),
+            recentTransactions: { transactions: [] },
+          },
+        ],
         abuseProtection: {
           blockVPNUsers: false,
           blockIncognito: false,
@@ -22,25 +38,39 @@ export const seedAdmin = async (ownerAddress: string) => {
           checkUserAgent: true,
           flaggedUsers: [],
         },
-
-        // GLOBAL STATS
         totalUsers: 0,
         totalClaims: 0,
-
-        // GLOBAL SYSTEM LOGS
         recentTransactions: [],
-
-        // SYSTEM META
-        lastUpdated: Date.now(),
-
-        // USERS RELATION
         users: [],
+        lastUpdated: Date.now(),
       });
+      await admin.save();
+      console.log(`Admin CREATED for network: ${networkData.networkName}`);
+      return;
+    }
 
-      await owner.save();
-      console.log(`Admin created: ${ownerAddress}`);
+    //---------------------------------------------
+    // 3. ADMIN EXISTS → CHECK IF NETWORK EXISTS
+    //---------------------------------------------
+    const existingNetwork = admin.networks.find(
+      (net: any) => net.networkName === networkData.networkName
+    );
+
+    //---------------------------------------------
+    // 4. ADD NEW NETWORK IF NOT EXISTS
+    //---------------------------------------------
+    if (!existingNetwork) {
+      admin.networks.push({
+        ...networkData,
+        latestWalletBalance: Number(networkBalance),
+        isFaucetActive: false,
+        lastHealthCheck: Date.now(),
+        recentTransactions: { transactions: [] },
+      } as INetworkConfig);
+      await admin.save();
+      console.log(`New NETWORK ADDED: ${networkData.networkName}`);
     } else {
-      console.log(`Admin already exists: ${ownerAddress}`);
+      console.log(`Network ALREADY EXISTS: ${networkData.networkName}`);
     }
   } catch (error) {
     console.error("Error seeding admin:", error);

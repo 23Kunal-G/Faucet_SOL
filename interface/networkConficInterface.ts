@@ -1,35 +1,35 @@
 import mongoose from "mongoose";
 
 export interface INetworkConfig extends mongoose.Document {
-  networkName: string;                 // e.g., "sepolia", "solana"
+  networkName: string; // e.g., "sepolia", "solana"
 
-  adminAddress: string;                // admin wallet for that network
-  faucetWalletAddress: string;         // faucet sender address
-  contractAddress: string;             // faucet contract address (if EVM)
+  adminAddress: string; // admin wallet for that network
+  faucetWalletAddress: string; // faucet sender address
+  contractAddress: string; // faucet contract address (if EVM)
 
   // Claim rules
-  claimAmount: number;                 // custom per network
-  claimIntervalHours: number;          // custom per network
-  maxDailyClaims: number;              // custom per network
+  claimAmount: number; // custom per network
+  claimIntervalHours: number; // custom per network
+  maxDailyClaims: number; // custom per network
 
   // Stats
-  totalClaims: number;                 // updated dynamically
-  totalUniqueClaimers: number;         // updated dynamically
-  totalTokensDistributed: number;      // updated dynamically
+  totalClaims: number; // updated dynamically
+  totalUniqueClaimers: number; // updated dynamically
+  totalTokensDistributed: number; // updated dynamically
 
   // Monitoring
-  latestWalletBalance: number;         // updated dynamically
+  latestWalletBalance: number; // updated dynamically
   isFaucetActive: boolean;
   lastHealthCheck: Number;
 
-  recentTransactions: [
-    {
+  recentTransactions: {
+    transactions: Array<{
       txHash: string;
       claimerAddress: string;
-      claimedAt: Date;
+      claimedAt: number;
       amount: string;
       ipAddress: string;
       userAgent: string;
-    }
-  ];
+    }>;
+  };
 }
