@@ -1,17 +1,29 @@
 import Admin from "../models/admin";
-import getBalance from "../../config/getBalance";
+import { getSolanaBalance, getSepoliaBalance } from "../../config/getBalance";
 import { INetworkConfig } from "../../interface/networkConficInterface";
 
-export const seedAdmin = async (ownerAddress: string, networkData: Partial<INetworkConfig>) => {
+export const seedAdmin = async (
+  ownerAddress: string,
+  networkData: Partial<INetworkConfig>
+) => {
   try {
     // 1. CHECK IF ADMIN EXISTS
     let admin = await Admin.findOne({ ownerAddress });
 
     // Fetch wallet balance for network admin
+    let networkBalance: number | undefined;
     if (!networkData.adminAddress) {
       throw new Error("adminAddress is required to fetch network balance.");
     }
-    const networkBalance = await getBalance(networkData.adminAddress);
+
+    const networkName = (networkData.networkName || "").toLowerCase();
+    if (networkName === "solana") {
+      networkBalance = await getSolanaBalance(networkData.adminAddress);
+    } else if (networkName === "sepolia") {
+      networkBalance = await Number(getSepoliaBalance(networkData.adminAddress));
+    } else {
+      throw new Error(`Unsupported network: ${networkData.networkName}`);
+    }
 
     // 2. CREATE ADMIN IF NOT FOUND
     if (!admin) {
