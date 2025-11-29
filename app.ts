@@ -16,7 +16,20 @@ const endpoint: string = process.env.SEPOLIA_RPC_ENDPOINT || "";
 const adminAddress: string = process.env.SEED_ADMIN_ADDRESS || "";
 
 // Define networkData or import it from the appropriate module
-const networkData = {}; // Replace with actual network data as needed
+const networksData = [
+  {
+    networkName: "Sepolia",
+    chainId: 11155111,
+    adminAddress: process.env.SEPOLIA_ADMIN_ADDRESS,   // Must exist in .env
+    rpcUrl: process.env.SEPOLIA_RPC_ENDPOINT,
+  },
+  {
+    networkName: "Solana",
+    chainId: 103,
+    adminAddress: process.env.SOLANA_ADMIN_ADDRESS,    // Must exist in .env
+    rpcUrl: process.env.SOLANA_RPC_ENDPOINT,
+  },
+];
 
 // middleware
 app.use(express.json());
@@ -41,8 +54,13 @@ async function startServer() {
     console.log(`Admin wallet balance fetched: ${balance}`);
 
     //Initialize Admin
-    await seedAdmin(adminAddress, networkData);
-    console.log("Admin initialized in DB");
+    const ownerAdminAddress = adminAddress;
+
+    // Initialize Admin for all networks
+    for (const network of networksData) {
+      console.log(`Initializing Network: ${network.networkName}`);
+      await seedAdmin(ownerAdminAddress, network);
+    }
 
     //Start the server
     app.listen(PORT, () => {

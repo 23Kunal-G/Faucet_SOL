@@ -4,9 +4,7 @@ import { INetworkConfig } from "../../interface/networkConficInterface";
 
 export const seedAdmin = async (ownerAddress: string, networkData: Partial<INetworkConfig>) => {
   try {
-    //---------------------------------------------
     // 1. CHECK IF ADMIN EXISTS
-    //---------------------------------------------
     let admin = await Admin.findOne({ ownerAddress });
 
     // Fetch wallet balance for network admin
@@ -15,9 +13,7 @@ export const seedAdmin = async (ownerAddress: string, networkData: Partial<INetw
     }
     const networkBalance = await getBalance(networkData.adminAddress);
 
-    //---------------------------------------------
     // 2. CREATE ADMIN IF NOT FOUND
-    //---------------------------------------------
     if (!admin) {
       admin = new Admin({
         ownerAddress,
@@ -49,16 +45,12 @@ export const seedAdmin = async (ownerAddress: string, networkData: Partial<INetw
       return;
     }
 
-    //---------------------------------------------
     // 3. ADMIN EXISTS → CHECK IF NETWORK EXISTS
-    //---------------------------------------------
     const existingNetwork = admin.networks.find(
       (net: any) => net.networkName === networkData.networkName
     );
 
-    //---------------------------------------------
     // 4. ADD NEW NETWORK IF NOT EXISTS
-    //---------------------------------------------
     if (!existingNetwork) {
       admin.networks.push({
         ...networkData,
