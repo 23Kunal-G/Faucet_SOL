@@ -6,6 +6,7 @@ export async function getSepoliaBalance(address: string) {
     const endpoint = process.env.SEPOLIA_RPC_ENDPOINT || "";
     const provider = await connectRPC(endpoint);
     const balance = await provider.getBalance(address);
+    console.log(`Balance in wei: ${balance}`);
     return balance;
   } catch (error) {
     console.log(`Error in getting balance : ${error}`);

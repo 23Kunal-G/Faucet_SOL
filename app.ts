@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import UserTokenClaimRouter from "./routers/user/claimRoute";
 import UserStatusRouter from "./routers/user/checkStatusRoute";
 import connectRPC,  {connectDB} from "./config/connection";
-// import  from "./config/getBalance";
+import { setNetwork } from "./config/setNetwork";
 import { seedAdmin } from "./admin/controller/seedAdmin";
 import { swaggerDocs } from "./swagger/swagger";
 
@@ -21,15 +21,23 @@ const networksData = [
     networkName: "sepolia",
     chainId: 11155111,
     adminAddress: process.env.SEPOLIA_ADMIN_ADDRESS,   // Must exist in .env
+    faucetWalletAddress: process.env.SEPOLIA_ADMIN_ADDRESS,
+    contractAddress: process.env.SEPOLIA_CONTRACT_ADDRESS,
     rpcUrl: process.env.SEPOLIA_RPC_ENDPOINT,
     claimAmount: 1,
+    claimIntervalHours: 24,
+    maxDailyClaims: 1
   },
   {
     networkName: "solana",
     chainId: 103,
     adminAddress: process.env.SOLANA_ADMIN_ADDRESS,    // Must exist in .env
+    faucetWalletAddress: process.env.SOLANA_ADMIN_ADDRESS,
+    contractAddress: process.env.SOLANA_CONTRACT_ADDRESS,
     rpcUrl: process.env.SOLANA_RPC_ENDPOINT,
     claimAmount: 2,
+    claimIntervalHours: 24,
+    maxDailyClaims: 2
   },
 ];
 
@@ -51,17 +59,16 @@ async function startServer() {
     await connectRPC(endpoint);
     console.log("RPC connected");
 
-    //Fetch Admin balance
-    // const balance = await getBalance(adminAddress);
-    // console.log(`Admin wallet balance fetched: ${balance}`);
-
     //Initialize Admin
     const ownerAdminAddress = adminAddress;
+
+    await seedAdmin(ownerAdminAddress);
+    console.log(`Initializing Admin: ${ownerAdminAddress}`);
 
     // Initialize Admin for all networks
     for (const network of networksData) {
       console.log(`Initializing Network: ${network.networkName}`);
-      await seedAdmin(ownerAdminAddress, network);
+      await setNetwork(ownerAdminAddress, network);
     }
 
     //Start the server
