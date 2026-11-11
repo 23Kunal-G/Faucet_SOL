@@ -11,7 +11,7 @@ const adminSchema = new mongoose.Schema<IAdmin>(
       unique: true,
     },
 
-    // MULTI-NETWORK CONFIGURATION  (solana + sepolia)
+    // MULTI-NETWORK CONFIGURATION (solana + sepolia)
     networks: {
       type: [networkConfigSchema],
       default: [],
@@ -20,7 +20,7 @@ const adminSchema = new mongoose.Schema<IAdmin>(
     // GLOBAL ANTI-ABUSE PROTECTION
     abuseProtection: {
       blockVPNUsers: { type: Boolean, default: false },
-      blockIncognito: { type: Boolean, default: false },
+      blockIncognito: { type: Boolean, default: true },
       blockMultipleDevices: { type: Boolean, default: false },
       checkIP: { type: Boolean, default: true },
       checkUserAgent: { type: Boolean, default: true },
@@ -28,6 +28,8 @@ const adminSchema = new mongoose.Schema<IAdmin>(
       flaggedUsers: [
         {
           walletAddress: String,
+          email: String,
+          ip: String,
           reason: String,
           flaggedAt: { type: Date, default: Date.now },
         },
@@ -65,6 +67,6 @@ const adminSchema = new mongoose.Schema<IAdmin>(
   { timestamps: true }
 );
 
-const Admin = mongoose.model("admin", adminSchema);
+const Admin = mongoose.model<IAdmin>("admin", adminSchema);
 
 export default Admin;

@@ -20,7 +20,7 @@ export interface INetworkConfig extends mongoose.Document {
   // Monitoring
   latestWalletBalance: number; // updated dynamically
   isFaucetActive: boolean;
-  lastHealthCheck: Number;
+  lastHealthCheck: number;
 
   recentTransactions: {
     transactions: Array<{

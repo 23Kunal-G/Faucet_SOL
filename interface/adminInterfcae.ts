@@ -2,11 +2,7 @@ import mongoose, { Schema } from "mongoose";
 import { INetworkConfig } from "./networkConficInterface";
 
 export interface IAdmin extends mongoose.Document {
-  ownerAddress: {
-    type: string;
-    required: true;
-    unique: true;
-  };
+  ownerAddress: string;
 
   // Multinetwork Configuration
   networks: INetworkConfig[];
@@ -20,28 +16,28 @@ export interface IAdmin extends mongoose.Document {
     checkUserAgent: boolean;
 
     flaggedUsers: {
-      walletAddress: string;
+      walletAddress?: string;
+      email?: string;
+      ip?: string;
       reason: string;
       flaggedAt: Date;
     }[];
   };
 
-  //  System statistics
+  // System statistics
   totalUsers: number;
   totalClaims: number;
 
   // Logs / monitoring
-  recentTransactions: [
-    {
-      txHash: String;
-      claimerAddress: String;
-      claimedAt: Date;
-      amount: String;
-    }
-  ];
+  recentTransactions: Array<{
+    txHash: string;
+    claimerAddress: string;
+    claimedAt: Date;
+    amount: string;
+  }>;
 
   // Relation to user model
-  users: [Schema.Types.ObjectId];
+  users: Schema.Types.ObjectId[];
 
   // System metadata
   lastUpdated: number;
